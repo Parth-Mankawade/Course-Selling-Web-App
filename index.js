@@ -10,10 +10,7 @@
 // Create the frontend
 
 
-/*
-This is section where i have doubts and topics i need to practice:
--how to make seperate endpoints for normal user and admins? simply? or special way?
-*/
+
 
 require('dotenv').config()
 
@@ -34,17 +31,11 @@ app.use("/api/v1/course" , courseRouter);
 app.use("/api/v1/admin", adminRouter);
 
 async function auth(res , req , next){
-    //check if email valid , 
-    //password valid
-    //first name and lastname valid
-
-
-
-    
+  
 }
 
 async function main() {
-    //dotenv , .env file
+   
     await mongoose.connect(process.env.MONGO_URL);
     app.listen(3000 , () => {
         console.log("Server is listening at port 3000");
