@@ -1,7 +1,7 @@
 const express = require("express");
 const Router = express.Router;
 
-// const { Router } = require("express");
+
 
 const userRouter = Router();
 const { UserModel , PurchaseModel, CoursesModel } = require("../db"); 
@@ -14,9 +14,7 @@ const { userMiddleware } = require("../middlewares/user");
 
 userRouter.post("/signup" , async function(req, res){
         const { email , password , firstName , lastName } = req.body;
-        //ADD ZOD VALIDATION
-        //HASHPASSWORD , NOP PLAINTEXT PASSWORD TO BE STORED IN DB
-        //put inside try catch block
+    
         try{
             await UserModel.create({
                 email ,
@@ -39,11 +37,11 @@ userRouter.post("/signup" , async function(req, res){
 userRouter.post("/signin" , async function(req, res){
     const {email , password } = req.body;
 
-    //todo : ideally password should be hashed and hence you cant compare the user provided password and the database password 
-    const user = await UserModel.findOne({ //either the user or undefined
+   
+    const user = await UserModel.findOne({ 
         email : email,
         password : password
-    }); //[] if find -> still valid therfore error
+    });
 
 
     if(user){
@@ -51,8 +49,7 @@ userRouter.post("/signin" , async function(req, res){
             id:user._id
         } , JWT_USER_PASSWORD);
 
-        //do cookie logic in the future
-
+ 
         res.json({
             token : token
         })
@@ -75,13 +72,6 @@ userRouter.get("/purchases" ,userMiddleware , async function(req , res){
     const purchases = await PurchaseModel.find({
         userId,
     })
-
-    // let purchasedCourseIds = [];
-
-
-    // for(let i = 0 ; i < purchases.length ; i++){
-    //     purchasedCourseIds.push(purchases[i].courseId)
-    // }
 
     const coursesData =  await CoursesModel.find({
         _id: { $in : purchases.map(x => x.courseId) }
